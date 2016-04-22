@@ -562,7 +562,17 @@ enum STBVorbisError
 #define NULL 0
 #endif
 
-#if !defined(_MSC_VER) && !(defined(__MINGW32__) && defined(__forceinline))
+#ifdef __MINGW32__
+   // eff you mingw:
+   //     "fixed":
+   //         http://sourceforge.net/p/mingw-w64/mailman/message/32882927/
+   //     "no that broke the build, reverted, who cares about C":
+   //         http://sourceforge.net/p/mingw-w64/mailman/message/32890381/
+   #ifdef __forceinline
+   #undef __forceinline
+   #endif
+   #define __forceinline
+#elif !defined(_MSC_VER)
    #if __GNUC__
       #define __forceinline inline
    #else
